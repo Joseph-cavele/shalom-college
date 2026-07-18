@@ -36,6 +36,8 @@ export function PopularCategories() {
                 <img
                   src={c.img ?? CATEGORY_IMAGE_URL[c.cat]}
                   alt={c.title}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />

@@ -58,6 +58,8 @@ export function FaqCta() {
             src={IMAGES.cta}
             alt=""
             aria-hidden
+            loading="lazy"
+            decoding="async"
             className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-1/2 object-cover object-top opacity-90 [mask-image:linear-gradient(to_right,transparent,black_40%)] sm:block"
           />
         </div>

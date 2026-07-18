@@ -126,6 +126,8 @@ export default function CoursesPage() {
                     <img
                       src={c.image || courseImage(c.name, c.category)}
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                       className="h-10 w-14 flex-none rounded-md object-cover"
                     />
                     <span className="font-semibold text-navy">{c.name}</span>

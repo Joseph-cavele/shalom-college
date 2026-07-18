@@ -20,6 +20,8 @@ export function Hero() {
       <img
         src={HERO_BG}
         alt="Practical welding training at Shalom Training School"
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       />
       {/* Overlays for legibility */}

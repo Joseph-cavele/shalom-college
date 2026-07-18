@@ -20,6 +20,8 @@ export function WhyChooseUs() {
           <img
             src={IMAGES.whyChoose}
             alt="Students in a practical training workshop"
+            loading="lazy"
+            decoding="async"
             className="aspect-[4/3] w-full rounded-2xl object-cover shadow-lg2"
           />
         </div>

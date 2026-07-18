@@ -25,6 +25,8 @@ export function GalleryTestimonials() {
                 key={i}
                 src={src}
                 alt="Training at Shalom"
+                loading="lazy"
+                decoding="async"
                 className="aspect-square w-full rounded-lg object-cover transition hover:opacity-90"
               />
             ))}
