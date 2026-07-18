@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 text-navy antialiased transition-colors duration-300 dark:bg-navy-900 dark:text-slate-100;
+  }
+  ::selection {
+    @apply bg-brand-green/30;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-[92%] max-w-[1180px];
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all;
+  }
+  .btn-green {
+    @apply bg-brand-green text-white hover:bg-brand-green-dark hover:-translate-y-0.5;
+  }
+  .btn-navy {
+    @apply bg-navy text-white hover:bg-navy-light dark:bg-brand-green dark:hover:bg-brand-green-dark;
+  }
+  .btn-outline {
+    @apply border-2 border-white/80 text-white hover:bg-white/10;
+  }
+  .btn-ghost {
+    @apply bg-navy-50 text-navy hover:bg-slate-200 dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/20;
+  }
+  .btn-sm {
+    @apply px-3.5 py-2 text-xs;
+  }
+
+  /* Form controls */
+  .field-label {
+    @apply mb-1.5 block text-sm font-bold text-navy dark:text-slate-200;
+  }
+  .field-input {
+    @apply w-full rounded-lg border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-[15px] text-navy
+           outline-none transition focus:border-brand-green focus:ring-2 focus:ring-brand-green/30
+           dark:border-white/10 dark:bg-navy-800 dark:text-slate-100 dark:placeholder:text-slate-500;
+  }
+
+  /* Cards & surfaces */
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-card dark:border-white/10 dark:bg-navy-800;
+  }
+  .badge {
+    @apply inline-block rounded-full px-3 py-1 text-xs font-extrabold;
+  }
+}
+
+@layer utilities {
+  /* Scroll-reveal animation (elements tagged with data-reveal) */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}

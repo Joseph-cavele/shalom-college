@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Shalom Training School SA">
+  <circle cx="60" cy="60" r="58" fill="#ffffff" stroke="#0a1a3c" stroke-width="3"/>
+  <circle cx="60" cy="60" r="45" fill="#0a1a3c"/>
+  <path d="M60 34 L90 47 L60 60 L30 47 Z" fill="#35b233"/>
+  <path d="M42 54 v11 c0 6 36 6 36 0 v-11 L60 62 Z" fill="#0a1a3c" stroke="#35b233" stroke-width="3"/>
+  <line x1="90" y1="47" x2="90" y2="66" stroke="#35b233" stroke-width="3"/>
+  <circle cx="90" cy="68" r="3" fill="#35b233"/>
+  <g fill="none" stroke="#35b233" stroke-width="3" stroke-linecap="round">
+    <path d="M52 78 a10 10 0 0 1 16 0"/>
+    <path d="M56 82 a5 5 0 0 1 8 0"/>
+  </g>
+  <circle cx="60" cy="86" r="2.5" fill="#35b233"/>
+  <text x="60" y="104" text-anchor="middle" fill="#ffffff" font-size="8" font-family="Arial" font-weight="bold" letter-spacing="1">EST 2025</text>
+</svg>
