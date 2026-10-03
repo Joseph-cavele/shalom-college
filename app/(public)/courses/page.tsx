@@ -19,9 +19,9 @@ export default async function CoursesPage({
     <>
       <section className="bg-gradient-to-r from-navy to-navy-light py-16 text-center text-white">
         <h1 className="text-4xl font-extrabold">Our Courses</h1>
-        <p className="mt-2 text-slate-300">Explore our wide range of accredited courses and short programmes.</p>
+        <p className="mx-auto mt-2 max-w-xl px-4 text-slate-300">Explore our wide range of accredited courses and short programmes.</p>
       </section>
-      <CoursesBrowser courses={courses} initialCategory={cat} />
+      <CoursesBrowser key={cat ?? "all"} courses={courses} initialCategory={cat} />
     </>
   );
 }

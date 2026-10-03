@@ -26,7 +26,7 @@ export function Navbar() {
       <div className="container-x flex items-center justify-between py-3">
         <Logo href="/admin/login" />
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <button
             className="text-navy dark:text-slate-100"
@@ -39,7 +39,7 @@ export function Navbar() {
 
         <div
           className={cn(
-            "absolute left-0 right-0 top-full flex-col gap-1 bg-white p-4 shadow-card dark:bg-navy-900 md:static md:flex md:flex-row md:items-center md:gap-7 md:bg-transparent md:p-0 md:shadow-none md:dark:bg-transparent",
+            "absolute left-0 right-0 top-full flex-col gap-1 bg-white p-4 shadow-card dark:bg-navy-900 lg:static lg:flex lg:flex-row lg:items-center lg:gap-7 lg:bg-transparent lg:p-0 lg:shadow-none lg:dark:bg-transparent",
             open ? "flex" : "hidden"
           )}
         >
@@ -49,7 +49,7 @@ export function Navbar() {
               href={l.href}
               onClick={() => setOpen(false)}
               className={cn(
-                "rounded-lg px-2 py-2 text-[0.95rem] font-semibold transition hover:text-brand-green md:p-0",
+                "rounded-lg px-2 py-2 text-[0.95rem] font-semibold transition hover:text-brand-green lg:p-0",
                 pathname === l.href ? "text-brand-green" : "text-navy dark:text-slate-100"
               )}
             >
@@ -59,7 +59,7 @@ export function Navbar() {
           <Link href="/apply" onClick={() => setOpen(false)} className="btn btn-green btn-sm">
             Apply Now
           </Link>
-          <span className="hidden md:block">
+          <span className="hidden lg:block">
             <ThemeToggle />
           </span>
         </div>

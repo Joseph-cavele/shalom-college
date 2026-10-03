@@ -6,16 +6,20 @@ import { createToken, setSessionCookie } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
+// Compared against when the email is unknown, so response time doesn't reveal which emails exist.
+const DUMMY_HASH = "$2a$10$X/KexubhQ0yK.h5236twAO.04SQZXq.fEbOyCiL0vW4OS1vG1ua7K";
+
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const { email, password } = await req.json();
-    if (!email || !password) {
+    if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
       return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
     }
 
-    const user = await User.findOne({ email: String(email).toLowerCase() });
-    if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+    const user = await User.findOne({ email: email.trim().toLowerCase() }).select("+passwordHash");
+    const valid = await bcrypt.compare(password, user?.passwordHash ?? DUMMY_HASH);
+    if (!user || !valid) {
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
