@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   ClipboardList,
+  FolderOpen,
   BookOpen,
   Mail,
   Image as ImageIcon,
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 const NAV: { href: string; icon: LucideIcon; label: string }[] = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/applications", icon: ClipboardList, label: "Applications" },
+  { href: "/admin/documents", icon: FolderOpen, label: "Documents" },
   { href: "/admin/courses", icon: BookOpen, label: "Courses" },
   { href: "/admin/messages", icon: Mail, label: "Messages" },
   { href: "/admin/content", icon: ImageIcon, label: "Website Content" },

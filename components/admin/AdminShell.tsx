@@ -14,6 +14,7 @@ interface AdminShellProps {
 const TITLES: Record<string, string> = {
   "/admin": "Dashboard",
   "/admin/applications": "Applications",
+  "/admin/documents": "Documents",
   "/admin/courses": "Courses",
   "/admin/messages": "Messages",
   "/admin/content": "Website Content",

@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Application } from "@/lib/models/Application";
 import { Course } from "@/lib/models/Course";
 import { StatCard } from "@/components/admin/StatCard";
-import { LineChart } from "@/components/admin/charts/LineChart";
+import { BarChart } from "@/components/admin/charts/BarChart";
 import { DonutChart } from "@/components/admin/charts/DonutChart";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { formatDate } from "@/lib/utils";
@@ -26,15 +26,25 @@ async function getDashboardData() {
     Registered: apps.filter((a) => a.status === "Registered").length,
   };
 
+  // Rolling last 12 months (oldest → current), each bucket keyed by year + month.
   const now = new Date();
-  const monthly = new Array(12).fill(0);
-  let newThisMonth = 0;
+  const monthly = Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - 11 + i, 1);
+    return {
+      key: `${d.getFullYear()}-${d.getMonth()}`,
+      label: d.toLocaleString("en-ZA", { month: "short" }),
+      title: d.toLocaleString("en-ZA", { month: "long", year: "numeric" }),
+      value: 0,
+    };
+  });
+  const bucket = new Map(monthly.map((m) => [m.key, m]));
   for (const a of apps) {
     const d = new Date(a.createdAt);
     if (isNaN(d.getTime())) continue;
-    monthly[d.getMonth()]++;
-    if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) newThisMonth++;
+    const m = bucket.get(`${d.getFullYear()}-${d.getMonth()}`);
+    if (m) m.value++;
   }
+  const newThisMonth = monthly[monthly.length - 1].value;
 
   return { apps, courseCount, byStatus, monthly, newThisMonth };
 }
@@ -60,8 +70,11 @@ export default async function DashboardPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="card p-5">
-          <h3 className="mb-3 font-bold text-navy">Applications Overview</h3>
-          <LineChart monthly={monthly} />
+          <div className="mb-3 flex items-baseline justify-between">
+            <h3 className="font-bold text-navy">Applications Overview</h3>
+            <span className="text-xs text-slate-400">Last 12 months</span>
+          </div>
+          <BarChart data={monthly} />
         </div>
         <div className="card p-5">
           <h3 className="mb-4 font-bold text-navy">Applications by Status</h3>

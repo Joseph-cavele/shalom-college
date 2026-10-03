@@ -17,10 +17,12 @@ export async function GET(req: NextRequest) {
   const filter: Record<string, unknown> = {};
   if (status && status !== "all") filter.status = status;
   if (q) {
+    // Escape so search text is matched literally, not run as a regular expression.
+    const rx = q.slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     filter.$or = [
-      { fullName: { $regex: q, $options: "i" } },
-      { course: { $regex: q, $options: "i" } },
-      { phone: { $regex: q, $options: "i" } },
+      { fullName: { $regex: rx, $options: "i" } },
+      { course: { $regex: rx, $options: "i" } },
+      { phone: { $regex: rx, $options: "i" } },
     ];
   }
 
