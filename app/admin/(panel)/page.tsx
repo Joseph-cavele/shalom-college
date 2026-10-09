@@ -24,6 +24,7 @@ async function getDashboardData() {
     Pending: apps.filter((a) => a.status === "Pending").length,
     Contacted: apps.filter((a) => a.status === "Contacted").length,
     Registered: apps.filter((a) => a.status === "Registered").length,
+    Rejected: apps.filter((a) => a.status === "Rejected").length,
   };
 
   // Rolling last 12 months (oldest → current), each bucket keyed by year + month.
@@ -57,6 +58,7 @@ export default async function DashboardPage() {
     { label: "Pending", value: byStatus.Pending, color: "#f59e0b" },
     { label: "Contacted", value: byStatus.Contacted, color: "#3b82f6" },
     { label: "Registered", value: byStatus.Registered, color: "#22c55e" },
+    { label: "Rejected", value: byStatus.Rejected, color: "#f43f5e" },
   ];
 
   return (

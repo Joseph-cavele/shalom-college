@@ -11,10 +11,12 @@ export interface Course {
   active: boolean;
 }
 
-export type ApplicationStatus = "Pending" | "Contacted" | "Registered";
+export type ApplicationStatus = "Pending" | "Contacted" | "Registered" | "Rejected";
 
 export interface Application {
   _id: string;
+  reference?: string;
+  studyMode?: string;
   course: string;
   campus: string;
   // Personal
@@ -52,6 +54,7 @@ export interface Message {
   _id: string;
   name: string;
   email: string;
+  phone?: string;
   subject: string;
   message: string;
   read: boolean;
@@ -74,6 +77,7 @@ export interface SiteSettings {
   whatsapp: string;
   campus1: string;
   campus2: string;
+  openingHours?: string;
   facebook: string;
   instagram: string;
   accreditation: string;
@@ -94,6 +98,6 @@ export interface Stats {
     courses: number;
     registered: number;
   };
-  byStatus: { Pending: number; Contacted: number; Registered: number };
+  byStatus: { Pending: number; Contacted: number; Registered: number; Rejected: number };
   monthly: number[];
 }

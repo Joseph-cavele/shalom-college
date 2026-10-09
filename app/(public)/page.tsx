@@ -1,6 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { TrustBar } from "@/components/sections/TrustBar";
-import { PopularCategories } from "@/components/sections/PopularCategories";
+import { PopularCourses } from "@/components/sections/PopularCourses";
 import { WhyChooseUs } from "@/components/sections/WhyChooseUs";
 import { TrainingCategories } from "@/components/sections/TrainingCategories";
 import { TrainingProcess } from "@/components/sections/TrainingProcess";
@@ -16,7 +16,7 @@ export default async function HomePage() {
     <>
       <Hero />
       <TrustBar />
-      <PopularCategories />
+      <PopularCourses />
       <WhyChooseUs />
       <TrainingCategories />
       <TrainingProcess />

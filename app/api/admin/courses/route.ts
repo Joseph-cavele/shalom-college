@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/guard";
 import { connectDB } from "@/lib/mongodb";
-import { Course } from "@/lib/models/Course";
+import { Course, courseNameTaken } from "@/lib/models/Course";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +20,16 @@ export async function POST(req: NextRequest) {
 
   await connectDB();
   const body = await req.json();
-  if (!body.name || !body.category) {
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  if (!name || !body.category) {
     return NextResponse.json({ error: "Name and category are required." }, { status: 400 });
+  }
+  if (await courseNameTaken(name)) {
+    return NextResponse.json({ error: `A course named "${name}" already exists.` }, { status: 409 });
   }
 
   const course = await Course.create({
-    name: body.name,
+    name,
     category: body.category,
     duration: body.duration || "",
     fee: Number(body.fee) || 0,

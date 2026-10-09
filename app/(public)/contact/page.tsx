@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
-import { MapEmbed } from "@/components/layout/MapEmbed";
+import { CampusMap } from "@/components/layout/CampusMap";
+import { PageHero } from "@/components/layout/PageHero";
 import { getSettings } from "@/lib/site";
 import { whatsappLink } from "@/lib/utils";
 
@@ -11,6 +13,22 @@ export const metadata: Metadata = {
     "Contact Shalom Training School — phone, email, WhatsApp or visit our Rustenburg and Brits campuses. We respond to all course enquiries.",
 };
 
+const tel = (n: string) => `tel:${n.replace(/[^\d+]/g, "")}`;
+
+function InfoRow({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children: React.ReactNode }) {
+  return (
+    <li className="flex gap-4 border-t border-slate-100 py-5 first:border-t-0 first:pt-0 dark:border-white/10">
+      <span className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-brand-green/10 text-brand-green-dark dark:bg-brand-green/15 dark:text-brand-green">
+        <Icon className="h-5 w-5" aria-hidden />
+      </span>
+      <div className="min-w-0 text-sm text-slate-500 dark:text-slate-400">
+        <h3 className="mb-1 font-bold text-navy dark:text-slate-100">{title}</h3>
+        {children}
+      </div>
+    </li>
+  );
+}
+
 export default async function ContactPage() {
   const settings = await getSettings();
   // WhatsApp number comes from .env (PHONE_NUMBER), falling back to site settings.
@@ -19,59 +37,88 @@ export default async function ContactPage() {
     whatsappNumber,
     "Hello Shalom Training School, I would like more information about your courses."
   );
+  const phones = [settings.phone1, settings.phone2, settings.phone3].filter(Boolean);
+  const campuses = [
+    { name: "Rustenburg", address: settings.campus1 },
+    { name: "Brits", address: settings.campus2 },
+  ];
+
   return (
     <>
-      <section className="bg-gradient-to-r from-navy to-navy-light py-16 text-center text-white">
-        <h1 className="text-4xl font-extrabold">Contact Us</h1>
-        <p className="mt-2 text-slate-300">We&apos;d love to hear from you. Reach out with any questions.</p>
-      </section>
+      <PageHero
+        title="Contact Us"
+        crumb="Contact Us"
+        intro="We'd love to hear from you. Reach out with any questions."
+      />
 
-      <section className="container-x grid gap-8 py-16 lg:grid-cols-[1fr_340px]">
-        <ContactForm />
+      <section className="container-x grid items-start gap-8 py-16 lg:grid-cols-[380px_1fr]">
+        <aside className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-7 dark:border-white/10 dark:bg-navy-800">
+          <h2 className="text-xl font-extrabold text-navy dark:text-slate-100">Contact Information</h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Have questions about our courses or need help applying? Call, email or WhatsApp us — or visit one of
+            our campuses.
+          </p>
 
-        <aside className="h-fit rounded-xl bg-navy p-7 text-white">
-          <h3 className="text-xl font-bold">Get In Touch</h3>
+          <ul className="mt-6">
+            {phones.length > 0 && (
+              <InfoRow icon={Phone} title="Phone Numbers">
+                {phones.map((p) => (
+                  <a key={p} href={tel(p)} className="block transition hover:text-brand-green-dark">
+                    {p}
+                  </a>
+                ))}
+              </InfoRow>
+            )}
+            {settings.email && (
+              <InfoRow icon={Mail} title="Email Address">
+                <a href={`mailto:${settings.email}`} className="break-all transition hover:text-brand-green-dark">
+                  {settings.email}
+                </a>
+              </InfoRow>
+            )}
+            {settings.openingHours && (
+              <InfoRow icon={Clock} title="Opening Hours">
+                <span className="whitespace-pre-line">{settings.openingHours}</span>
+              </InfoRow>
+            )}
+            <InfoRow icon={MapPin} title="Our Campuses">
+              {campuses
+                .filter((c) => c.address)
+                .map((c) => (
+                  <p key={c.name} className="mb-2 last:mb-0">
+                    <b className="text-navy dark:text-slate-200">{c.name}:</b> {c.address}
+                  </p>
+                ))}
+            </InfoRow>
+          </ul>
 
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25d366] px-4 py-3 font-bold text-white transition hover:bg-[#1ebe5b]"
-          >
-            <MessageCircle className="h-5 w-5" /> Chat on WhatsApp
-          </a>
-          <p className="mt-2 text-center text-xs text-slate-400">{whatsappNumber}</p>
-
-          <div className="mt-4 flex gap-3 text-sm text-slate-300">
-            <Phone className="h-5 w-5 flex-none text-brand-green" />
-            <div>{settings.phone3}<br />{settings.phone2}<br />{settings.phone1}</div>
-          </div>
-          <div className="mt-3 flex gap-3 text-sm text-slate-300">
-            <Mail className="h-5 w-5 flex-none text-brand-green" />
-            <div>{settings.email}</div>
-          </div>
-          <div className="mt-3 flex gap-3 text-sm text-slate-300">
-            <MapPin className="h-5 w-5 flex-none text-brand-green" />
-            <div><b className="text-white">Rustenburg</b><br />{settings.campus1}</div>
-          </div>
-          <div className="mt-3 flex gap-3 text-sm text-slate-300">
-            <MapPin className="h-5 w-5 flex-none text-brand-green" />
-            <div><b className="text-white">Brits</b><br />{settings.campus2}</div>
-          </div>
+          {whatsappNumber && (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25d366] px-4 py-3 font-bold text-white transition hover:bg-[#1ebe5b]"
+            >
+              <MessageCircle className="h-5 w-5" aria-hidden /> Chat on WhatsApp
+            </a>
+          )}
         </aside>
+
+        <ContactForm />
       </section>
 
       <section className="container-x pb-20">
-        <h2 className="mb-6 text-center text-2xl font-extrabold text-navy dark:text-slate-100">Find Us On The Map</h2>
-        <div className="grid gap-6 md:grid-cols-2">
-          <div data-reveal>
-            <h3 className="mb-2 font-bold text-navy dark:text-slate-100">📍 Rustenburg Campus</h3>
-            <MapEmbed address={settings.campus1} title="Rustenburg campus map" />
-          </div>
-          <div data-reveal data-reveal-delay="120">
-            <h3 className="mb-2 font-bold text-navy dark:text-slate-100">📍 Brits Campus</h3>
-            <MapEmbed address={settings.campus2} title="Brits campus map" />
-          </div>
+        <div className="text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-brand-green/10 px-3 py-1 text-xs font-bold text-brand-green-dark dark:bg-brand-green/15 dark:text-brand-green">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-green" aria-hidden />
+            Our Location
+          </span>
+          <h2 className="mx-auto mt-3 max-w-2xl text-2xl font-extrabold text-navy sm:text-3xl dark:text-slate-100">
+            Visit Our Campuses For In-Person Enquiries &amp; Registration
+          </h2>
+        </div>
+        <div className="mt-8">
+          <CampusMap campuses={campuses} />
         </div>
       </section>
     </>

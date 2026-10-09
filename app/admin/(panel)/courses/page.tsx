@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2, ImageIcon } from "lucide-react";
 import { api } from "@/lib/client";
 import { toast } from "@/components/ui/Toast";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { ActiveBadge } from "@/components/ui/StatusBadge";
-import { money, courseImage } from "@/lib/utils";
+import { money, withCourseImages } from "@/lib/utils";
 import { CATEGORY_ORDER } from "@/lib/data/courses";
 import type { Course } from "@/lib/types";
 
@@ -29,6 +29,9 @@ export default function CoursesPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Course>>(EMPTY);
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  // Display-only: fills auto photos for the table without touching saved data.
+  const withImages = useMemo(() => withCourseImages(courses), [courses]);
 
   async function load() {
     setLoading(true);
@@ -50,10 +53,17 @@ export default function CoursesPage() {
   }
 
   async function save() {
-    if (!editing.name || !editing.category) {
+    // Ignore repeat clicks while a save is in flight, or the course is created twice.
+    if (saving) return;
+    if (!editing.name?.trim() || !editing.category) {
       toast("Name and category are required.", false);
       return;
     }
+    if (uploading) {
+      toast("Please wait for the image to finish uploading.", false);
+      return;
+    }
+    setSaving(true);
     try {
       if (editing._id) {
         await api(`/api/admin/courses/${editing._id}`, { method: "PUT", body: editing });
@@ -66,6 +76,8 @@ export default function CoursesPage() {
       load();
     } catch (e) {
       toast((e as Error).message, false);
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -118,13 +130,13 @@ export default function CoursesPage() {
             </tr>
           </thead>
           <tbody>
-            {courses.map((c) => (
+            {withImages.map((c) => (
               <tr key={c._id} className="border-b border-slate-100 hover:bg-slate-50">
                 <td className="px-2 py-3">
                   <div className="flex items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={c.image || courseImage(c.name, c.category)}
+                      src={c.image}
                       alt=""
                       loading="lazy"
                       decoding="async"
@@ -169,7 +181,9 @@ export default function CoursesPage() {
         footer={
           <>
             <button onClick={() => setOpen(false)} className="btn btn-ghost">Cancel</button>
-            <Button onClick={save}>Save Course</Button>
+            <Button onClick={save} disabled={saving || uploading}>
+              {saving ? "Saving…" : "Save Course"}
+            </Button>
           </>
         }
       >

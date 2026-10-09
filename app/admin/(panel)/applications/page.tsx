@@ -9,7 +9,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { formatDate } from "@/lib/utils";
 import type { Application, ApplicationStatus } from "@/lib/types";
 
-const STATUSES: ApplicationStatus[] = ["Pending", "Contacted", "Registered"];
+const STATUSES: ApplicationStatus[] = ["Pending", "Contacted", "Registered", "Rejected"];
 
 /** Labelled value row inside the detail modal. */
 function Row({ label, value }: { label: string; value?: string }) {
@@ -124,7 +124,10 @@ export default function ApplicationsPage() {
                   <div className="font-semibold text-navy">{app.fullName}</div>
                   <div className="text-xs text-slate-400">{app.email || app.idNumber}</div>
                 </td>
-                <td className="px-2 py-3 text-slate-600">{app.course}</td>
+                <td className="px-2 py-3 text-slate-600">
+                  {app.course}
+                  {app.studyMode && <span className="block text-xs text-slate-400">{app.studyMode}</span>}
+                </td>
                 <td className="px-2 py-3 text-slate-600">{app.phone}</td>
                 <td className="px-2 py-3 text-slate-600">{app.campus || "—"}</td>
                 <td className="px-2 py-3 text-slate-500">{formatDate(app.createdAt)}</td>
@@ -170,13 +173,17 @@ export default function ApplicationsPage() {
         {a && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <StatusBadge status={a.status} />
+              <div className="flex items-center gap-2">
+                <StatusBadge status={a.status} />
+                {a.reference && <span className="font-mono text-xs font-bold text-navy">{a.reference}</span>}
+              </div>
               <span className="text-xs text-slate-400">Applied {formatDate(a.createdAt)}</span>
             </div>
 
             <section>
               <h4 className="mb-1 text-sm font-extrabold uppercase tracking-wide text-brand-green">Course</h4>
               <Row label="Course" value={a.course} />
+              <Row label="Study Mode" value={a.studyMode} />
               <Row label="Campus" value={a.campus} />
             </section>
 

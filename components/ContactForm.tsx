@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
+import { CATEGORY_ORDER } from "@/lib/data/courses";
 
-const SUBJECTS = ["General Inquiry", "Course Information", "Application Help", "Fees Structure"];
+const SUBJECTS = ["General Inquiry", "Application Help", "Fees Structure", ...CATEGORY_ORDER];
 
 /** Contact-us message form. */
 export function ContactForm() {
@@ -13,6 +14,7 @@ export function ContactForm() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submitting) return;
     setStatus(null);
     setSubmitting(true);
     const form = e.currentTarget;
@@ -35,35 +37,68 @@ export function ContactForm() {
   }
 
   return (
-    <div className="card p-8">
-      <h3 className="mb-4 text-xl font-bold text-navy dark:text-slate-100">Send Us a Message</h3>
-      {status && <Alert type={status.type}>{status.msg}</Alert>}
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-x-5 sm:grid-cols-2">
-          <div className="mb-4">
-            <label className="field-label">Name <span className="text-rose-500">*</span></label>
-            <input name="name" required className="field-input" />
-          </div>
-          <div className="mb-4">
-            <label className="field-label">Email <span className="text-rose-500">*</span></label>
-            <input type="email" name="email" required className="field-input" />
-          </div>
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-8 dark:border-white/10 dark:bg-navy-800">
+      <span className="inline-flex items-center gap-2 rounded-full bg-brand-green/10 px-3 py-1 text-xs font-bold text-brand-green-dark dark:bg-brand-green/15 dark:text-brand-green">
+        <span className="h-1.5 w-1.5 rounded-full bg-brand-green" aria-hidden />
+        Get In Touch
+      </span>
+      <h2 className="mt-3 text-3xl font-extrabold text-navy dark:text-slate-100">Send Us a Message</h2>
+      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+        Have a question about a course, fees or your application? Fill in the form and our team will get back to
+        you as soon as possible.
+      </p>
+
+      {status && (
+        <div className="mt-5">
+          <Alert type={status.type}>{status.msg}</Alert>
         </div>
-        <div className="mb-4">
-          <label className="field-label">Subject</label>
-          <select name="subject" className="field-input">
+      )}
+
+      <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="c-name" className="field-label">Full Name <span className="text-rose-500">*</span></label>
+          <input id="c-name" name="name" required maxLength={100} autoComplete="name" className="field-input" />
+        </div>
+        <div>
+          <label htmlFor="c-email" className="field-label">Email Address <span className="text-rose-500">*</span></label>
+          <input id="c-email" type="email" name="email" required maxLength={200} autoComplete="email" className="field-input" />
+        </div>
+        <div>
+          <label htmlFor="c-phone" className="field-label">Phone Number</label>
+          <input id="c-phone" type="tel" name="phone" maxLength={30} autoComplete="tel" className="field-input" />
+        </div>
+        <div>
+          <label htmlFor="c-subject" className="field-label">I&apos;m Interested In</label>
+          <select id="c-subject" name="subject" className="field-input">
             {SUBJECTS.map((s) => (
               <option key={s}>{s}</option>
             ))}
           </select>
         </div>
-        <div className="mb-5">
-          <label className="field-label">Message <span className="text-rose-500">*</span></label>
-          <textarea name="message" required rows={5} className="field-input" placeholder="How can we help you?" />
+        <div className="sm:col-span-2">
+          <label htmlFor="c-message" className="field-label">Message <span className="text-rose-500">*</span></label>
+          <textarea
+            id="c-message"
+            name="message"
+            required
+            rows={5}
+            maxLength={5000}
+            className="field-input"
+            placeholder="How can we help you?"
+          />
         </div>
-        <Button type="submit" block disabled={submitting}>
-          {submitting ? "Sending…" : "Send Message"}
-        </Button>
+        <div className="sm:col-span-2">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="inline-flex items-center gap-3 rounded-lg bg-brand-green py-2.5 pl-5 pr-2.5 text-sm font-bold text-white transition hover:bg-brand-green-dark disabled:opacity-60"
+          >
+            {submitting ? "Sending…" : "Send Message"}
+            <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-brand-green">
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+            </span>
+          </button>
+        </div>
       </form>
     </div>
   );

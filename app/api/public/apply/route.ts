@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { randomBytes } from "crypto";
+import { isValidSaPhone, looksLikeSaId, parseSaId } from "@/lib/sa-id";
 import { connectDB } from "@/lib/mongodb";
-import { Application } from "@/lib/models/Application";
+import { Application, STUDY_MODES } from "@/lib/models/Application";
 import { uploadToCloudinary } from "@/lib/cloudinary";
-import { notifyNewApplication } from "@/lib/email";
+import { notifyNewApplication, confirmApplicationReceived } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +30,14 @@ async function saveFile(file: FormDataEntryValue | null): Promise<string> {
   return `/uploads/${filename}`;
 }
 
-const str = (form: FormData, key: string) => String(form.get(key) || "").trim();
+const str = (form: FormData, key: string) => String(form.get(key) || "").trim().slice(0, 300);
+
+// Short, readable reference without look-alike characters (no 0/O, 1/I).
+function newReference(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = randomBytes(6);
+  return "SHA-" + Array.from(bytes, (b) => chars[b % chars.length]).join("");
+}
 
 // Submit a course application (multipart form; several optional document uploads).
 export async function POST(req: NextRequest) {
@@ -39,12 +48,20 @@ export async function POST(req: NextRequest) {
     const fullName = str(form, "fullName");
     const phone = str(form, "phone");
     const course = str(form, "course");
+    const idNumber = str(form, "idNumber");
+    const email = str(form, "email");
 
-    if (!fullName || !phone || !course) {
-      return NextResponse.json(
-        { error: "Full name, cell phone and course are required." },
-        { status: 400 }
-      );
+    const bad = (error: string) => NextResponse.json({ error }, { status: 400 });
+    if (!fullName || !phone || !course) return bad("Full name, cell phone and course are required.");
+    if (!isValidSaPhone(phone)) return bad("Please enter a valid South African phone number, e.g. 071 234 5678.");
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return bad("Please enter a valid email address.");
+    if (looksLikeSaId(idNumber) && !parseSaId(idNumber).valid) {
+      return bad("That South African ID number is not valid. Please check it and try again.");
+    }
+    const studyMode = str(form, "studyMode");
+    if (!STUDY_MODES.includes(studyMode)) return bad("Please choose full-time or part-time study.");
+    if (form.get("consent") !== "on") {
+      return bad("Please agree to the privacy notice so we can process your application.");
     }
 
     let docId = "", docResults = "", docResidence = "", docFee = "";
@@ -60,16 +77,19 @@ export async function POST(req: NextRequest) {
     }
 
     const application = {
+      reference: newReference(),
+      consentAt: new Date(),
       course,
       campus: str(form, "campus"),
+      studyMode,
       fullName,
-      idNumber: str(form, "idNumber"),
+      idNumber: idNumber.replace(/\s/g, ""),
       dateOfBirth: str(form, "dateOfBirth"),
       gender: str(form, "gender"),
       nationality: str(form, "nationality"),
       homeLanguage: str(form, "homeLanguage"),
       phone,
-      email: str(form, "email"),
+      email,
       residentialAddress: str(form, "residentialAddress"),
       postalAddress: str(form, "postalAddress"),
       guardianName: str(form, "guardianName"),
@@ -88,10 +108,15 @@ export async function POST(req: NextRequest) {
     };
 
     await Application.create(application);
-    await notifyNewApplication(application);
+    await Promise.all([
+      notifyNewApplication(application),
+      confirmApplicationReceived(application),
+    ]);
 
     return NextResponse.json({
       ok: true,
+      reference: application.reference,
+      emailed: !!email,
       message: "Application submitted successfully. We will contact you soon.",
     });
   } catch (err) {

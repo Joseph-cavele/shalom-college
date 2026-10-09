@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       { fullName: { $regex: rx, $options: "i" } },
       { course: { $regex: rx, $options: "i" } },
       { phone: { $regex: rx, $options: "i" } },
+      { reference: { $regex: rx, $options: "i" } },
     ];
   }
 

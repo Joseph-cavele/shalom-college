@@ -18,3 +18,11 @@ const CourseSchema = new Schema(
 export type CourseType = InferSchemaType<typeof CourseSchema> & { _id: mongoose.Types.ObjectId };
 
 export const Course = models.Course || model("Course", CourseSchema);
+
+/** True if another course already uses this name (case-insensitive, ignoring `exceptId`). */
+export async function courseNameTaken(name: string, exceptId?: string): Promise<boolean> {
+  const escaped = name.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const filter: Record<string, unknown> = { name: { $regex: `^\\s*${escaped}\\s*$`, $options: "i" } };
+  if (exceptId) filter._id = { $ne: exceptId };
+  return !!(await Course.exists(filter));
+}

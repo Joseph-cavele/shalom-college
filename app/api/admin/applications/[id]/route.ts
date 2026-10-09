@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/guard";
 import { connectDB } from "@/lib/mongodb";
-import { Application } from "@/lib/models/Application";
+import { Application, APPLICATION_STATUSES, type ApplicationType } from "@/lib/models/Application";
+import { notifyStatusChange } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +17,22 @@ export async function PUT(
   const { id } = await params;
   const body = await req.json();
   const update: Record<string, unknown> = {};
-  if (body.status) update.status = body.status;
+  if (body.status) {
+    if (!APPLICATION_STATUSES.includes(body.status)) {
+      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    }
+    update.status = body.status;
+  }
 
-  const application = await Application.findByIdAndUpdate(id, update, { new: true }).lean();
-  if (!application) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  // Return the previous version so we only email the applicant on a real change.
+  const previous = await Application.findByIdAndUpdate(id, update).lean<ApplicationType>();
+  if (!previous) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  if (update.status && update.status !== previous.status) {
+    await notifyStatusChange(previous, update.status as string);
+  }
+
+  const application = { ...previous, ...update };
   return NextResponse.json({ ok: true, application });
 }
 

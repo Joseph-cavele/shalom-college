@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/guard";
 import { connectDB } from "@/lib/mongodb";
-import { Course } from "@/lib/models/Course";
+import { Course, courseNameTaken } from "@/lib/models/Course";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +20,14 @@ export async function PUT(
   ["name", "category", "duration", "feeUnit", "level", "description", "image"].forEach((k) => {
     if (body[k] !== undefined) update[k] = body[k];
   });
+  if (update.name !== undefined) {
+    const name = typeof update.name === "string" ? update.name.trim() : "";
+    if (!name) return NextResponse.json({ error: "Name is required." }, { status: 400 });
+    if (await courseNameTaken(name, id)) {
+      return NextResponse.json({ error: `A course named "${name}" already exists.` }, { status: 409 });
+    }
+    update.name = name;
+  }
   if (body.fee !== undefined) update.fee = Number(body.fee) || 0;
   if (body.active !== undefined) update.active = !!body.active;
 

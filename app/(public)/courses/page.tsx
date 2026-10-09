@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { CoursesBrowser } from "@/components/CoursesBrowser";
+import { PageHero } from "@/components/layout/PageHero";
 import { getActiveCourses } from "@/lib/site";
+import { withCourseImages } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Our Courses",
@@ -17,11 +19,12 @@ export default async function CoursesPage({
 
   return (
     <>
-      <section className="bg-gradient-to-r from-navy to-navy-light py-16 text-center text-white">
-        <h1 className="text-4xl font-extrabold">Our Courses</h1>
-        <p className="mx-auto mt-2 max-w-xl px-4 text-slate-300">Explore our wide range of accredited courses and short programmes.</p>
-      </section>
-      <CoursesBrowser key={cat ?? "all"} courses={courses} initialCategory={cat} />
+      <PageHero
+        title="Our Courses"
+        crumb="Courses"
+        intro="Explore our wide range of accredited courses and short programmes."
+      />
+      <CoursesBrowser key={cat ?? "all"} courses={withCourseImages(courses)} initialCategory={cat} />
     </>
   );
 }

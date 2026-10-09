@@ -49,6 +49,11 @@ export default function MessagesPage() {
               <div>
                 <span className="font-extrabold text-navy">{m.name}</span>
                 <span className="ml-2 text-sm text-slate-400">{m.email}</span>
+                {m.phone && (
+                  <a href={`tel:${m.phone.replace(/[^\d+]/g, "")}`} className="ml-2 text-sm text-slate-400 hover:underline">
+                    {m.phone}
+                  </a>
+                )}
                 <div className="text-sm font-bold text-brand-green">{m.subject}</div>
               </div>
               <div className="whitespace-nowrap text-xs text-slate-400">{formatDate(m.createdAt)}</div>

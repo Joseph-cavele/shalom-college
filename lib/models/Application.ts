@@ -1,10 +1,19 @@
 import mongoose, { Schema, model, models, InferSchemaType } from "mongoose";
 
+export const APPLICATION_STATUSES = ["Pending", "Contacted", "Registered", "Rejected"];
+export const STUDY_MODES = ["Full-time", "Part-time"];
+
 const ApplicationSchema = new Schema(
   {
+    // Short reference the applicant receives, e.g. "SHA-7K3Q9P" (searchable in the dashboard).
+    reference: { type: String, default: "", index: true },
+    // When the applicant agreed to the POPIA notice on the form.
+    consentAt: { type: Date },
+
     // Course selection
     course: { type: String, required: true },
     campus: { type: String, default: "" },
+    studyMode: { type: String, enum: ["", ...STUDY_MODES], default: "" }, // Full-time / Part-time
 
     // Personal information
     fullName: { type: String, required: true },
@@ -40,7 +49,7 @@ const ApplicationSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["Pending", "Contacted", "Registered"],
+      enum: APPLICATION_STATUSES,
       default: "Pending",
     },
   },

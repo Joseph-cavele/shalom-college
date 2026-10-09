@@ -33,14 +33,19 @@ function hashString(str: string): number {
  * sibling courses don't all share one image.
  */
 const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
-  // Welding & metalwork (bright, clear welding close-up)
-  [/weld/i, ["/pexels-felipe-silva-1458994757-27082729.jpg"]],
+  // Welding & metalwork (bright, clear welding close-up first)
+  [/weld/i, [
+    "/pexels-felipe-silva-1458994757-27082729.jpg",
+    "/pexels-solliefoto-320621.jpg",
+    "/pexels-lineartwork-12526764.jpg",
+  ]],
   [/boiler|machining|grind|metal/i, ["/pexels-lineartwork-12526764.jpg"]],
   // Mining & construction machinery
   [/dump truck/i, ["/pexels-rounak-kayal-183268922-33774180.jpg"]],
   [/excavator|tlb|loader|grader|forklift|roller|bobcat|bulldozer|lhd|drill|blasting/i, [
     "/pexels-pixabay-162639.jpg",
     "/pexels-robertkso-14484423.jpg",
+    "/pexels-rounak-kayal-183268922-33774180.jpg",
   ]],
   // PLC / instrumentation / industrial electronics
   [/plc|instrumentation|industrial electronics/i, [
@@ -75,12 +80,38 @@ const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
   [/fet|grade|subject|class/i, ["/extra-classes.jpg"]],
 ];
 
-/** Topical local photo for a course card, keyword-matched on the course name. */
-export function courseImage(name: string, category: string): string {
+const FALLBACK_COURSE_IMAGE = "/pexels-mikhail-nilov-9242175.jpg";
+
+/** Photo pool for a course: first keyword rule that matches, else its category photo. */
+function imagePool(name: string, category: string): string[] {
   for (const [re, imgs] of COURSE_IMAGE_RULES) {
-    if (re.test(name)) return imgs[hashString(name) % imgs.length];
+    if (re.test(name)) return imgs;
   }
-  return CATEGORY_IMAGE_URL[category] || "/pexels-mikhail-nilov-9242175.jpg";
+  return [CATEGORY_IMAGE_URL[category] || FALLBACK_COURSE_IMAGE];
+}
+
+/** Topical local photo for a single course card, keyword-matched on the course name. */
+export function courseImage(name: string, category: string): string {
+  const imgs = imagePool(name, category);
+  return imgs[hashString(name) % imgs.length];
+}
+
+/**
+ * Fill in auto photos for a list of courses, rotating through each photo pool
+ * in list order so courses sharing a pool get different photos instead of
+ * several cards in a row showing the same one. Uploaded images are kept.
+ */
+export function withCourseImages<T extends { name: string; category: string; image?: string }>(
+  courses: T[]
+): T[] {
+  const used = new Map<string[], number>();
+  return courses.map((c) => {
+    if (c.image) return c;
+    const pool = imagePool(c.name, c.category);
+    const n = used.get(pool) ?? 0;
+    used.set(pool, n + 1);
+    return { ...c, image: pool[n % pool.length] };
+  });
 }
 
 /** Curated local photos (in /public) used across the marketing site. */

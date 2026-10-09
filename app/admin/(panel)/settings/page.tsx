@@ -76,6 +76,7 @@ export default function SettingsPage() {
           <Field label="Phone 1" k="phone1" />
           <Field label="Phone 2" k="phone2" />
           <Field label="Phone 3" k="phone3" />
+          <Field label="Opening Hours" k="openingHours" placeholder="e.g. Mon – Fri: 08:00 – 16:30" />
           <div className="sm:col-span-2">
             <Field label="Campus 1 (Rustenburg)" k="campus1" />
           </div>

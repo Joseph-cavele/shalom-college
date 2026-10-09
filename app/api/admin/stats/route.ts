@@ -17,6 +17,7 @@ export async function GET() {
     Pending: apps.filter((a) => a.status === "Pending").length,
     Contacted: apps.filter((a) => a.status === "Contacted").length,
     Registered: apps.filter((a) => a.status === "Registered").length,
+    Rejected: apps.filter((a) => a.status === "Rejected").length,
   };
 
   const now = new Date();
