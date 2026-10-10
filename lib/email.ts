@@ -2,7 +2,8 @@ import { Resend } from "resend";
 
 const API_KEY = process.env.RESEND_API_KEY;
 const FROM = process.env.FROM_EMAIL || "Shalom Training School <info@shalomtrainingschool.co.za>";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+// Owner inbox for new-application and contact-message alerts.
+const ADMIN_EMAIL = process.env.OWNER_EMAIL || process.env.ADMIN_EMAIL;
 
 const resend = API_KEY ? new Resend(API_KEY) : null;
 
@@ -70,10 +71,10 @@ async function deliver(to: string, subject: string, html: string) {
   }
 }
 
-/** Email the school owner (ADMIN_EMAIL). */
+/** Email the school owner (OWNER_EMAIL). */
 async function send(subject: string, html: string) {
   if (!resend || !ADMIN_EMAIL) {
-    console.warn("Email skipped: RESEND_API_KEY or ADMIN_EMAIL not set.");
+    console.warn("Email skipped: RESEND_API_KEY or OWNER_EMAIL not set.");
     return;
   }
   await deliver(ADMIN_EMAIL, subject, html);

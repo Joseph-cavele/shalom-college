@@ -12,7 +12,7 @@ Website + admin dashboard for **Shalom Training School** — built with
 
 **Integrations**
 - **Cloudinary** — application ID documents upload to Cloudinary when configured (falls back to local `/public/uploads` otherwise)
-- **Resend** — the admin (`ADMIN_EMAIL`) is emailed on every new application and contact message
+- **Resend** — the owner (`OWNER_EMAIL`) is emailed on every new application and contact message
 
 **Admin dashboard** (`/admin`)
 - Secure login (JWT httpOnly cookie, route protected by middleware)
@@ -43,7 +43,7 @@ CLOUDINARY_API_SECRET=...
 # optional — enable email notifications
 RESEND_API_KEY=...
 FROM_EMAIL="Shalom Training School <info@shalomtrainingschool.co.za>"
-ADMIN_EMAIL=you@example.com
+OWNER_EMAIL=you@example.com
 ```
 
 Both Cloudinary and Resend are optional — the app runs without them (local
