@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Message } from "@/lib/models/Message";
-import { notifyNewMessage } from "@/lib/email";
+import { notifyNewMessage, confirmMessageReceived } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -28,9 +28,15 @@ export async function POST(req: NextRequest) {
     const subject = String(body.subject || "General Inquiry").trim().slice(0, 100) || "General Inquiry";
     await Message.create({ name, email, phone, subject, message, read: false });
 
-    await notifyNewMessage({ name, email, phone, subject, message });
+    await Promise.all([
+      notifyNewMessage({ name, email, phone, subject, message }),
+      confirmMessageReceived({ name, email, subject, message }),
+    ]);
 
-    return NextResponse.json({ ok: true, message: "Thank you! Your message has been sent." });
+    return NextResponse.json({
+      ok: true,
+      message: "Thank you! Your message has been sent. A confirmation has been emailed to you.",
+    });
   } catch (err) {
     console.error("POST /api/public/contact", err);
     return NextResponse.json({ error: "Failed to send message" }, { status: 500 });

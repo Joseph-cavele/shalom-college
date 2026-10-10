@@ -137,6 +137,29 @@ export async function notifyNewMessage(m: {
   );
 }
 
+/** Confirmation to the sender after they submit the contact form. */
+export async function confirmMessageReceived(m: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  await sendToApplicant(
+    m.email,
+    `We received your message — ${SCHOOL}`,
+    shell(
+      "Message Received",
+      [
+        ["Name", m.name],
+        ["Subject", m.subject],
+        ["Your Message", m.message],
+      ],
+      `Dear ${m.name}, thank you for contacting ${SCHOOL}. We have received your inquiry and our team will get back to you as soon as possible.`,
+      APPLICANT_FOOTER
+    )
+  );
+}
+
 /** Confirmation to the applicant after they submit the form. */
 export async function confirmApplicationReceived(a: {
   reference?: string;
