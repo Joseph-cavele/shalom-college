@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Phone, Mail, MapPin, MessageCircle, BadgeCheck, Building2, ShieldCheck } from "lucide-react";
+import { Phone, Mail, MapPin, BadgeCheck, Building2, ShieldCheck } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 import { ApplyForm } from "@/components/ApplyForm";
 import { PageHero } from "@/components/layout/PageHero";
 import { getActiveCourses, getSettings } from "@/lib/site";
@@ -65,9 +66,8 @@ export default async function ApplyPage({
               <li className="flex gap-3">
                 <MapPin className="h-5 w-5 flex-none text-brand-green" aria-hidden />
                 <div>
-                  <p className="font-bold text-navy dark:text-slate-200">Two physical campuses</p>
+                  <p className="font-bold text-navy dark:text-slate-200">Rustenburg campus</p>
                   <p className="text-slate-500 dark:text-slate-400">{settings.campus1}</p>
-                  <p className="mt-1 text-slate-500 dark:text-slate-400">{settings.campus2}</p>
                 </div>
               </li>
               <li className="flex gap-3">
@@ -127,7 +127,7 @@ export default async function ApplyPage({
                 rel="noopener noreferrer"
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25d366] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#1ebe5b]"
               >
-                <MessageCircle className="h-4 w-4" aria-hidden /> WhatsApp us
+                <FaWhatsapp className="h-4 w-4" aria-hidden /> WhatsApp us
               </a>
             )}
           </div>

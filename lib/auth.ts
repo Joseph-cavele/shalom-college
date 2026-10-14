@@ -1,60 +1,31 @@
-import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
-
-const COOKIE_NAME = "shalom_session";
-const secret = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "dev-insecure-secret-change-me"
-);
+import { isValidObjectId } from "mongoose";
+import { auth } from "@/auth";
+import { connectDB } from "@/lib/mongodb";
+import { User } from "@/lib/models/User";
 
 export interface SessionPayload {
   id: string;
   email: string;
   fullName: string;
+  role: string;
 }
 
-/** Create a signed JWT for the admin session (valid 8 hours). */
-export async function createToken(payload: SessionPayload): Promise<string> {
-  return new SignJWT({ ...payload })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("8h")
-    .sign(secret);
-}
-
-/** Verify a token string and return its payload, or null. */
-export async function verifyToken(
-  token: string | undefined
-): Promise<SessionPayload | null> {
-  if (!token) return null;
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload as unknown as SessionPayload;
-  } catch {
-    return null;
-  }
-}
-
-/** Set the session cookie (call from a Route Handler / Server Action). */
-export async function setSessionCookie(token: string) {
-  const store = await cookies();
-  store.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 8,
-  });
-}
-
-export async function clearSessionCookie() {
-  const store = await cookies();
-  store.delete(COOKIE_NAME);
-}
-
-/** Read + verify the current session from cookies. */
+/**
+ * The signed-in owner, or null. Beyond validating the Auth.js session cookie it
+ * re-reads the account, so a disabled or deleted owner loses access on the very
+ * next request. Every protected page, route handler and server action goes
+ * through this (directly or via `requireAuth`); middleware is only a convenience.
+ */
 export async function getSession(): Promise<SessionPayload | null> {
-  const store = await cookies();
-  return verifyToken(store.get(COOKIE_NAME)?.value);
-}
+  const session = await auth();
+  const id = session?.user?.id;
+  if (!id || !isValidObjectId(id)) return null;
 
-export const SESSION_COOKIE = COOKIE_NAME;
+  await connectDB();
+  const owner = await User.findOne({ _id: id, role: "OWNER", status: "active" })
+    .select("fullName email role")
+    .lean<{ fullName: string; email: string; role: string }>();
+  if (!owner) return null;
+
+  return { id, email: owner.email, fullName: owner.fullName, role: owner.role };
+}

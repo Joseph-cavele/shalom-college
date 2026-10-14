@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Phone, Mail, Facebook, Instagram, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { Logo } from "@/components/ui/Logo";
-import { waLink } from "@/lib/utils";
 import type { SiteSettings } from "@/lib/types";
 
 const COURSES = [
@@ -24,11 +24,11 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             <p className="mt-4 text-sm">
               Providing accredited practical and theoretical training that empowers students with skills for a better future.
             </p>
-            <div className="mt-4 flex gap-3">
-              <a href={settings.facebook || "#"} aria-label="Facebook" className="grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-brand-green hover:text-white"><Facebook className="h-4 w-4" /></a>
-              <a href={settings.instagram || "#"} aria-label="Instagram" className="grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-brand-green hover:text-white"><Instagram className="h-4 w-4" /></a>
-              <a href={waLink(settings.whatsapp)} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-brand-green hover:text-white"><MessageCircle className="h-4 w-4" /></a>
-            </div>
+            <SocialLinks
+              settings={settings}
+              className="mt-4 gap-3"
+              itemClassName="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition hover:bg-brand-green hover:text-white"
+            />
           </div>
 
           <div>
@@ -52,9 +52,9 @@ export function Footer({ settings }: { settings: SiteSettings }) {
           </div>
 
           <div>
-            <h4 className="mb-4 font-semibold text-white">Campuses</h4>
-            <p className="mb-2 text-sm">Rustenburg Campus</p>
-            <p className="text-sm">Brits Campus</p>
+            <h4 className="mb-4 font-semibold text-white">Campus</h4>
+            <p className="mb-2 text-sm font-semibold text-white">Rustenburg Campus</p>
+            <p className="flex gap-2 text-sm"><MapPin className="h-4 w-4 flex-none text-brand-green" /> {settings.campus1}</p>
           </div>
 
           <div>

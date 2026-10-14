@@ -1,7 +1,5 @@
-import { MessageCircle } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 import { waLink } from "@/lib/utils";
-import {FaWhatsapp} from "react-icons/fa"
- 
 
 /** Floating WhatsApp contact button. */
 export function WhatsAppButton({ phone }: { phone: string }) {

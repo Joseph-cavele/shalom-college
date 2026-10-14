@@ -428,7 +428,7 @@ export function ApplyForm({
               ))}
             </div>
           </div>
-          <SelectField label="Preferred campus" name="campus" placeholder="Select campus" options={["Rustenburg", "Brits"]} />
+          <input type="hidden" name="campus" value="Rustenburg" />
         </Section>
 
         <Section icon={User} step={2} title="Personal Information">

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://shalomtrainingschool.co.za";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.shalomtrainingschool.co.za"; // canonical host (the bare domain redirects here)
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s — Shalom Training School",
   },
   description:
-    "MERSETA accredited practical & theoretical training in engineering, artisan, mining, computer and management courses. Rustenburg & Brits campuses. Apply online today.",
+    "MERSETA accredited practical & theoretical training in engineering, artisan, mining, computer and management courses. Rustenburg campus, North West. Apply online today.",
   keywords: [
     "Shalom Training School",
     "artisan training South Africa",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "trade test preparation",
     "mining machinery training",
     "welding courses Rustenburg",
-    "computer courses Brits",
+    "computer courses Rustenburg",
     "technical college North West",
   ],
   applicationName: "Shalom Training School",
@@ -31,23 +31,24 @@ export const metadata: Metadata = {
     siteName: "Shalom Training School",
     title: "Shalom Training School — Accredited Artisan & Engineering College",
     description:
-      "MERSETA accredited practical & theoretical training in engineering, artisan, mining, computer and management courses. Rustenburg & Brits campuses.",
+      "MERSETA accredited practical & theoretical training in engineering, artisan, mining, computer and management courses. Rustenburg campus, North West.",
     locale: "en_ZA",
-    images: [{ url: "/logo.png", width: 512, height: 512, alt: "Shalom Training School logo" }],
+    // Wide card for WhatsApp / Facebook / LinkedIn link previews.
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Shalom Training School logo" }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Shalom Training School — Accredited Artisan & Engineering College",
     description:
       "MERSETA accredited training in engineering, artisan, mining, computer and management courses.",
-    images: ["/logo.png"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  icons: { icon: "/logo.png" },
+  // Browser-tab / Google favicon, home-screen icons: app/favicon.ico, app/icon.png, app/apple-icon.png.
 };
 
 export const viewport: Viewport = {

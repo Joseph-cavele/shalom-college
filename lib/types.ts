@@ -76,10 +76,9 @@ export interface SiteSettings {
   phone3: string;
   whatsapp: string;
   campus1: string;
-  campus2: string;
   openingHours?: string;
   facebook: string;
-  instagram: string;
+  tiktok: string;
   accreditation: string;
   established: string;
   mission: string;

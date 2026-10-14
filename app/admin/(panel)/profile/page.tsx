@@ -34,7 +34,7 @@ export default function ProfilePage() {
   }
 
   async function changePassword() {
-    if (pw.newPassword.length < 6) return toast("New password must be at least 6 characters.", false);
+    if (pw.newPassword.length < 8) return toast("New password must be at least 8 characters.", false);
     if (pw.newPassword !== pw.confirm) return toast("Passwords do not match.", false);
     setSaving(true);
     try {
@@ -86,6 +86,9 @@ export default function ProfilePage() {
         <div className="grid gap-4">
           <div>
             <label className="field-label">Current Password</label>
+            <p className="-mt-1 mb-1.5 text-xs text-slate-500">
+              Optional backup to the emailed sign-in code. Leave blank if you have never set a password.
+            </p>
             <input type="password" value={pw.currentPassword} onChange={(e) => setPw({ ...pw, currentPassword: e.target.value })} className="field-input" />
           </div>
           <div>

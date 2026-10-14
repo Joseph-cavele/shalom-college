@@ -1,7 +1,8 @@
 import { Resend } from "resend";
 
 const API_KEY = process.env.RESEND_API_KEY;
-const FROM = process.env.FROM_EMAIL || "Shalom Training School <info@shalomtrainingschool.co.za>";
+const FROM =
+  process.env.EMAIL_FROM || process.env.FROM_EMAIL || "Shalom Training School <info@shalomtrainingschool.co.za>";
 // Owner inbox for new-application and contact-message alerts.
 const ADMIN_EMAIL = process.env.OWNER_EMAIL || process.env.ADMIN_EMAIL;
 
@@ -227,4 +228,33 @@ export async function notifyStatusChange(
       APPLICANT_FOOTER
     )
   );
+}
+
+/**
+ * Email the owner their six-digit sign-in code. The code is only placed in the
+ * message body — never logged. Provider errors are logged by `deliver` and not
+ * surfaced to the visitor (the login page always shows the same message).
+ */
+export async function sendLoginCodeEmail(to: string, code: string) {
+  if (!resend) {
+    console.warn("Login code email skipped: RESEND_API_KEY not set.");
+    return;
+  }
+  const html = `
+  <div style="font-family:Segoe UI,Arial,sans-serif;max-width:480px;margin:auto;border:1px solid #e4e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:${BRAND};padding:20px 24px;color:#fff">
+      <div style="font-size:18px;font-weight:800">${SCHOOL}</div>
+      <div style="font-size:12px;color:${GREEN};letter-spacing:2px">ADMIN SIGN-IN</div>
+    </div>
+    <div style="padding:28px 24px;text-align:center">
+      <h2 style="margin:0 0 8px;color:${BRAND}">Your sign-in code</h2>
+      <p style="color:#64748b;margin:0 0 20px">Enter this code on the admin login page:</p>
+      <div style="display:inline-block;padding:14px 22px;border-radius:10px;background:#f4f6fb;font-size:32px;font-weight:800;letter-spacing:8px;color:${BRAND};font-family:Consolas,monospace">${code}</div>
+      <p style="color:#64748b;margin:20px 0 0;font-size:14px">This code expires in <b>10 minutes</b> and can only be used once.</p>
+    </div>
+    <div style="background:#f4f6fb;padding:12px 24px;color:#94a3b8;font-size:12px">
+      If you didn't try to sign in, you can safely ignore this email — nobody can get in without the code.
+    </div>
+  </div>`;
+  await deliver(to, `Your ${SCHOOL} sign-in code`, html);
 }

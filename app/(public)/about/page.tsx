@@ -7,7 +7,7 @@ import { GALLERY } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Shalom Training School is a registered, MERSETA accredited training institution with campuses in Rustenburg and Brits, North West, South Africa.",
+    "Shalom Training School is a registered, MERSETA accredited training institution with a campus in Rustenburg, North West, South Africa.",
 };
 
 const WHY = [

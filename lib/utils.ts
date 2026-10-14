@@ -40,13 +40,22 @@ const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
     "/pexels-lineartwork-12526764.jpg",
   ]],
   [/boiler|machining|grind|metal/i, ["/pexels-lineartwork-12526764.jpg"]],
-  // Mining & construction machinery
-  [/dump truck/i, ["/pexels-rounak-kayal-183268922-33774180.jpg"]],
-  [/excavator|tlb|loader|grader|forklift|roller|bobcat|bulldozer|lhd|drill|blasting/i, [
-    "/pexels-pixabay-162639.jpg",
-    "/pexels-robertkso-14484423.jpg",
-    "/pexels-rounak-kayal-183268922-33774180.jpg",
+  // Mining & construction machinery — one photo of each actual machine
+  [/dump truck/i, [
+    "/mining-dump-truck.jpg",
+    "/mining-articulated-dump-truck.jpg",
+    "/mining-articulated-dump-truck-2.jpg",
   ]],
+  [/excavator/i, ["/mining-excavator.jpg"]],
+  [/\btlb\b/i, ["/mining-tlb.jpg"]],
+  [/front end loader|\bfel\b/i, ["/mining-front-end-loader.jpg"]],
+  [/grader/i, ["/mining-grader.jpg"]],
+  [/forklift/i, ["/mining-forklift.jpg"]],
+  [/roller/i, ["/mining-roller-compactor.jpg"]],
+  [/bobcat/i, ["/mining-bobcat.jpg"]],
+  [/\blhd\b/i, ["/mining-lhd.jpg"]],
+  [/drill rig|blasting/i, ["/mining-drill-rig.jpg"]],
+  // (no bulldozer photo yet — falls back to the Mining & Construction category photo)
   // PLC / instrumentation / industrial electronics
   [/plc|instrumentation|industrial electronics/i, [
     "/pexels-philips-espinoza-1275989311-26100225.jpg",
@@ -70,10 +79,13 @@ const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
     "/pexels-dothanhyb-5530443.jpg",
   ]],
   // Management & office programmes
-  [/management|marketing|financial|business|human resource|public relations|assistant/i, [
-    "/pexels-thirdman-7654000.jpg",
-    "/pexels-ai25studioai-6632536.jpg",
-  ]],
+  // Management programmes — a different photo for each course
+  [/financial/i, ["/management-finance-pexels-33175649.jpg"]],
+  [/marketing/i, ["/pexels-thirdman-7654000.jpg"]],
+  [/human resource/i, ["/pexels-ai25studioai-6632536.jpg"]],
+  [/public relations/i, ["/management-pr-pexels-33317197.jpg"]],
+  [/management assistant|office assistant/i, ["/management-assistant-pexels-8691834.jpg"]],
+  [/management|business/i, ["/management.jpg"]],
   // Engineering studies: mechanical & electrical practical focus, civil = drawings
   [/mechanical engineering/i, ["/pexels-amar-11157438.jpg"]],
   [/civil|engineering/i, ["/pexels-shvetsa-5324968.jpg"]],
@@ -126,11 +138,11 @@ export const GALLERY = [
   "/pexels-mickael-ange-konan-2156070331-34526423.jpg", // electrical training
   "/pexels-felipe-silva-1458994757-27082729.jpg",       // welding
   "/pexels-delot-18471488.jpg",                          // computer lab
-  "/pexels-robertkso-14484423.jpg",                      // heavy machinery
+  "/mining-tlb.jpg",                                     // heavy machinery (TLB)
   "/pexels-sejio402-29181492.jpg",                       // mechanical / gearbox
   "/pexels-shameer-vayalakkad-hydrose-2602409-21812146.jpg", // electrical panel
-  "/pexels-rounak-kayal-183268922-33774180.jpg",         // mining haul truck
-  "/pexels-ai25studioai-6632536.jpg",                    // management / office
+  "/mining-dump-truck.jpg",                              // mining haul truck
+  "/management.jpg",                                     // management class
 ];
 
 /** Hero background photo. */
@@ -139,10 +151,10 @@ export const HERO_IMAGE_URL = IMAGES.hero;
 /** Category → local course/category image (used on category cards). */
 export const CATEGORY_IMAGE_URL: Record<string, string> = {
   "Engineering Studies": "/pexels-shvetsa-5324968.jpg",
-  "Mining & Construction": "/pexels-pixabay-162639.jpg",
+  "Mining & Construction": "/mining-front-end-loader.jpg",
   "Artisan Practical Skills": "/pexels-felipe-silva-1458994757-27082729.jpg",
   "Computer Short Courses": "/pexels-delot-18471488.jpg",
-  "Management Programmes": "/pexels-thirdman-7654000.jpg",
+  "Management Programmes": "/management.jpg",
   "Trade Test Preparation": "/pexels-omar-ramadan-1739260-6517339.jpg",
   "Extra Classes (FET)": "/extra-classes.jpg",
 };

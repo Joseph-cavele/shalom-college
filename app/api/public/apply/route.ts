@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
       reference: newReference(),
       consentAt: new Date(),
       course,
-      campus: str(form, "campus"),
+      campus: "Rustenburg", // single campus
       studyMode,
       fullName,
       idNumber: idNumber.replace(/\s/g, ""),

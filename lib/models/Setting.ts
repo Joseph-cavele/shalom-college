@@ -18,11 +18,10 @@ const SettingSchema = new Schema(
     phone2: { type: String, default: "079 296 6008" },
     phone3: { type: String, default: "072 097 1972" },
     whatsapp: { type: String, default: "063 561 8241" },
-    campus1: { type: String, default: "27 Steen Street, Rustenburg, North West 0300" },
-    campus2: { type: String, default: "40 Kapp Building, Murray Avenue, 1st Floor, Brits 0250" },
+    campus1: { type: String, default: "27 Steen Street, Rustenburg 0300, North West" }, // Rustenburg campus address
     openingHours: { type: String, default: "" }, // e.g. "Mon – Fri: 08:00 – 16:30"; hidden on the site when blank
-    facebook: { type: String, default: "" },
-    instagram: { type: String, default: "" },
+    facebook: { type: String, default: "https://www.facebook.com/shalomtrainingschoolsa" },
+    tiktok: { type: String, default: "https://www.tiktok.com/@shalomtrainingschool" },
     accreditation: { type: String, default: "MERSETA Accredited" },
     established: { type: String, default: "2025" },
     mission: { type: String, default: "To empower individuals with relevant skills and knowledge through quality training and development." },

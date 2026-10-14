@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import { requireAuth } from "@/lib/guard";
 import { connectDB } from "@/lib/mongodb";
 import { User } from "@/lib/models/User";
-import { createToken, setSessionCookie } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +37,9 @@ export async function PUT(req: NextRequest) {
     if (!isStr(newPassword) || newPassword.length < 8 || newPassword.length > 72) {
       return NextResponse.json({ error: "New password must be 8–72 characters." }, { status: 400 });
     }
-    if (!isStr(currentPassword) || !(await bcrypt.compare(currentPassword, user.passwordHash))) {
+    // The first backup password can be set without a current one (sign-in is by emailed code).
+    const hasPassword = !!user.passwordHash;
+    if (hasPassword && (!isStr(currentPassword) || !(await bcrypt.compare(currentPassword, user.passwordHash)))) {
       return NextResponse.json({ error: "Current password is incorrect." }, { status: 400 });
     }
     user.passwordHash = await bcrypt.hash(newPassword, 12);
@@ -55,9 +56,7 @@ export async function PUT(req: NextRequest) {
     throw err;
   }
 
-  // Refresh the session cookie so the top bar reflects the new name/email.
-  const token = await createToken({ id: user._id.toString(), email: user.email, fullName: user.fullName });
-  await setSessionCookie(token);
+  // No cookie refresh needed: getSession() reads name/email from the database on every request.
 
   return NextResponse.json({ ok: true, admin: { fullName: user.fullName, email: user.email } });
 }

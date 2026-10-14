@@ -12,7 +12,7 @@ export function HomeContact({ settings }: { settings: SiteSettings }) {
         <div className="mx-auto mt-2 h-1 w-16 rounded bg-brand-green" />
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3" data-reveal>
-          <MapEmbed address={settings.campus1} title="Campus locations map" />
+          <MapEmbed address={settings.campus1} title="Rustenburg campus map" />
 
           <ContactForm />
 
@@ -23,13 +23,6 @@ export function HomeContact({ settings }: { settings: SiteSettings }) {
                 <div>
                   <div className="font-bold text-navy dark:text-slate-100">Rustenburg Campus</div>
                   <div className="text-slate-500 dark:text-slate-400">{settings.campus1}</div>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <MapPin className="h-5 w-5 flex-none text-brand-green" />
-                <div>
-                  <div className="font-bold text-navy dark:text-slate-100">Brits Campus</div>
-                  <div className="text-slate-500 dark:text-slate-400">{settings.campus2}</div>
                 </div>
               </div>
               <div className="flex gap-3">

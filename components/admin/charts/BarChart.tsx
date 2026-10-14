@@ -5,13 +5,20 @@ import { useState } from "react";
 /**
  * Applications-per-month bars (single series → one hue, no legend; the title
  * names it). Recessive grid, rounded bars, hover highlight + tooltip.
- * The current (last) month is drawn solid; earlier months slightly lighter.
+ * The highlighted month (default: the last) is drawn solid; others slightly
+ * lighter. Only the highlighted and peak bars carry a value label.
  */
-export function BarChart({ data }: { data: { label: string; title: string; value: number }[] }) {
+export function BarChart({
+  data,
+  highlight = data.length - 1,
+}: {
+  data: { label: string; title: string; value: number }[];
+  highlight?: number;
+}) {
   const [hover, setHover] = useState<number | null>(null);
 
-  const W = 640;
-  const H = 240;
+  const W = 480;
+  const H = 280;
   const pad = { top: 20, right: 12, bottom: 28, left: 32 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
@@ -23,7 +30,8 @@ export function BarChart({ data }: { data: { label: string; title: string; value
   const barW = Math.min(32, slot * 0.6);
   const cx = (i: number) => pad.left + slot * i + slot / 2;
   const barH = (v: number) => (plotH * v) / max;
-  const last = data.length - 1;
+  const last = highlight;
+  const peak = data.reduce((best, d, i) => (d.value > data[best].value ? i : best), 0);
 
   return (
     <div className="relative w-full">
@@ -53,10 +61,15 @@ export function BarChart({ data }: { data: { label: string; title: string; value
               {h > 0 && (
                 <path
                   d={`M ${x0} ${y0 + h} V ${y0 + r} Q ${x0} ${y0} ${x0 + r} ${y0} H ${x0 + barW - r} Q ${x0 + barW} ${y0} ${x0 + barW} ${y0 + r} V ${y0 + h} Z`}
-                  fill={hover === i ? "#0B1F45" : "#35b233"}
+                  fill={hover === i ? "#0B1F45" : "#16A34A"}
                   fillOpacity={hover === i || i === last ? 1 : 0.75}
                   className="transition-colors"
                 />
+              )}
+              {h > 0 && (i === last || i === peak) && hover === null && (
+                <text x={cx(i)} y={y0 - 6} textAnchor="middle" fontSize="11" fontWeight={700} fill="#0B1F45">
+                  {d.value}
+                </text>
               )}
               <text
                 x={cx(i)}

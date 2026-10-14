@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { LucideIcon } from "lucide-react";
-import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 import { ContactForm } from "@/components/ContactForm";
 import { CampusMap } from "@/components/layout/CampusMap";
 import { PageHero } from "@/components/layout/PageHero";
@@ -10,7 +11,7 @@ import { whatsappLink } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Contact Shalom Training School — phone, email, WhatsApp or visit our Rustenburg and Brits campuses. We respond to all course enquiries.",
+    "Contact Shalom Training School — phone, email, WhatsApp or visit our Rustenburg campus. We respond to all course enquiries.",
 };
 
 const tel = (n: string) => `tel:${n.replace(/[^\d+]/g, "")}`;
@@ -40,7 +41,6 @@ export default async function ContactPage() {
   const phones = [settings.phone1, settings.phone2, settings.phone3].filter(Boolean);
   const campuses = [
     { name: "Rustenburg", address: settings.campus1 },
-    { name: "Brits", address: settings.campus2 },
   ];
 
   return (
@@ -55,8 +55,8 @@ export default async function ContactPage() {
         <aside className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-7 dark:border-white/10 dark:bg-navy-800">
           <h2 className="text-xl font-extrabold text-navy dark:text-slate-100">Contact Information</h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Have questions about our courses or need help applying? Call, email or WhatsApp us — or visit one of
-            our campuses.
+            Have questions about our courses or need help applying? Call, email or WhatsApp us — or visit our
+            Rustenburg campus.
           </p>
 
           <ul className="mt-6">
@@ -81,7 +81,7 @@ export default async function ContactPage() {
                 <span className="whitespace-pre-line">{settings.openingHours}</span>
               </InfoRow>
             )}
-            <InfoRow icon={MapPin} title="Our Campuses">
+            <InfoRow icon={MapPin} title="Our Campus">
               {campuses
                 .filter((c) => c.address)
                 .map((c) => (
@@ -99,7 +99,7 @@ export default async function ContactPage() {
               rel="noopener noreferrer"
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25d366] px-4 py-3 font-bold text-white transition hover:bg-[#1ebe5b]"
             >
-              <MessageCircle className="h-5 w-5" aria-hidden /> Chat on WhatsApp
+              <FaWhatsapp className="h-5 w-5" aria-hidden /> Chat on WhatsApp
             </a>
           )}
         </aside>
@@ -114,7 +114,7 @@ export default async function ContactPage() {
             Our Location
           </span>
           <h2 className="mx-auto mt-3 max-w-2xl text-2xl font-extrabold text-navy sm:text-3xl dark:text-slate-100">
-            Visit Our Campuses For In-Person Enquiries &amp; Registration
+            Visit Our Campus For In-Person Enquiries &amp; Registration
           </h2>
         </div>
         <div className="mt-8">

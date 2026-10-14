@@ -78,10 +78,7 @@ export default function SettingsPage() {
           <Field label="Phone 3" k="phone3" />
           <Field label="Opening Hours" k="openingHours" placeholder="e.g. Mon – Fri: 08:00 – 16:30" />
           <div className="sm:col-span-2">
-            <Field label="Campus 1 (Rustenburg)" k="campus1" />
-          </div>
-          <div className="sm:col-span-2">
-            <Field label="Campus 2 (Brits)" k="campus2" />
+            <Field label="Campus Address (Rustenburg)" k="campus1" />
           </div>
         </div>
       )}
@@ -102,7 +99,7 @@ export default function SettingsPage() {
       {tab === "Social Media" && (
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Facebook URL" k="facebook" placeholder="https://facebook.com/…" />
-          <Field label="Instagram URL" k="instagram" placeholder="https://instagram.com/…" />
+          <Field label="TikTok URL" k="tiktok" placeholder="https://www.tiktok.com/@…" />
         </div>
       )}
 

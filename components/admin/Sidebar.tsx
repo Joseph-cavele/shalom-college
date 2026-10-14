@@ -13,9 +13,11 @@ import {
   Settings,
   User,
   LogOut,
+  Trophy,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logout as signOutAction } from "@/app/admin/login/actions";
 
 const NAV: { href: string; icon: LucideIcon; label: string }[] = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
@@ -33,7 +35,7 @@ export function Sidebar({ open, onNavigate }: { open: boolean; onNavigate: () =>
   const router = useRouter();
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await signOutAction();
     router.push("/admin/login");
     router.refresh();
   }
@@ -41,7 +43,7 @@ export function Sidebar({ open, onNavigate }: { open: boolean; onNavigate: () =>
   return (
     <aside
       className={cn(
-        "fixed z-[90] flex h-screen w-64 flex-none flex-col bg-navy text-slate-300 transition-transform md:sticky md:top-0 md:translate-x-0",
+        "fixed z-[90] flex h-screen w-64 flex-none flex-col bg-gradient-to-b from-navy-900 via-navy to-indigo-950 text-slate-300 transition-transform md:sticky md:top-0 md:translate-x-0 print:hidden",
         open ? "translate-x-0" : "-translate-x-full"
       )}
     >
@@ -62,8 +64,10 @@ export function Sidebar({ open, onNavigate }: { open: boolean; onNavigate: () =>
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3.5 py-3 text-[0.92rem] font-semibold transition",
-                active ? "bg-brand-green text-white" : "hover:bg-white/10 hover:text-white"
+                "flex items-center gap-3 rounded-xl px-3.5 py-3 text-[0.92rem] font-semibold transition",
+                active
+                  ? "bg-gradient-to-r from-brand-green to-emerald-500 text-white shadow-lg shadow-emerald-900/30"
+                  : "hover:bg-white/10 hover:text-white"
               )}
             >
               <item.icon className="h-5 w-5 flex-none" />
@@ -71,9 +75,15 @@ export function Sidebar({ open, onNavigate }: { open: boolean; onNavigate: () =>
             </Link>
           );
         })}
+        <div className="mt-auto mb-2 rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
+          <Trophy className="mx-auto h-7 w-7 text-brand-gold" />
+          <p className="mt-2 text-[0.82rem] font-semibold leading-snug text-white">
+            &ldquo;Education is the key to success. Keep learning, keep growing!&rdquo;
+          </p>
+        </div>
         <button
           onClick={logout}
-          className="mt-auto flex items-center gap-3 rounded-lg px-3.5 py-3 text-left text-[0.92rem] font-semibold transition hover:bg-white/10 hover:text-white"
+          className="flex items-center gap-3 rounded-lg px-3.5 py-3 text-left text-[0.92rem] font-semibold transition hover:bg-white/10 hover:text-white"
         >
           <LogOut className="h-5 w-5 flex-none" />
           Logout

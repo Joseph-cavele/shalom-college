@@ -10,7 +10,7 @@ const FAQS = [
   { q: "What are the course fees?", a: "Fees vary by programme — from R750/month for extra classes to R9,500 for artisan programmes. See each course on the Courses page." },
   { q: "How long are the courses?", a: "From 2-week short courses to 2–6 month artisan and engineering programmes. Duration is listed on every course." },
   { q: "Do you offer certificates?", a: "Yes. On successful completion you receive a recognised certificate. We are a MERSETA accredited institution." },
-  { q: "Which campus should I choose?", a: "We have campuses in Rustenburg and Brits. Choose whichever is most convenient — both offer the same quality training." },
+  { q: "Where is the campus?", a: "Our campus is at 27 Steen Street, Rustenburg 0300, North West. Visit us for in-person enquiries and registration." },
 ];
 
 /** FAQ accordion beside the final call-to-action. */

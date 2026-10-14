@@ -44,7 +44,7 @@ export function AdminShell({ fullName, children }: AdminShellProps) {
       {open && <div className="fixed inset-0 z-[80] bg-black/40 md:hidden" onClick={() => setOpen(false)} />}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex items-center justify-between bg-white px-6 py-3.5 shadow-card">
+        <header className="sticky top-0 z-20 flex print:hidden items-center justify-between bg-white px-6 py-3.5 shadow-card">
           <div className="flex items-center gap-3">
             <button className="text-navy md:hidden" onClick={() => setOpen(true)} aria-label="Open menu">
               <Menu className="h-6 w-6" />
@@ -59,7 +59,7 @@ export function AdminShell({ fullName, children }: AdminShellProps) {
           </div>
         </header>
 
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6 print:p-0">{children}</div>
       </div>
 
       <Toaster />
