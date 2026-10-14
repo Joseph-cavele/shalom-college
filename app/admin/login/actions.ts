@@ -17,9 +17,10 @@ const WINDOW = 15 * 60; // seconds
 const TOO_MANY = "Too many attempts. Please wait a few minutes and try again.";
 
 /**
- * Step 1: email a sign-in code. The response is identical whether or not the
- * address belongs to the owner; the code is issued and emailed after the
- * response is sent, so timing doesn't reveal it either.
+ * Step 1: email a sign-in code. An unknown (or disabled) email gets a clear
+ * error, at the owner's request — this confirms which address is the admin
+ * one, so the rate limits above are what keep guessing slow. The code is
+ * issued and emailed after the response is sent.
  */
 export async function requestLoginCode(input: { email: string }): Promise<ActionResult> {
   const parsed = requestCodeSchema.safeParse(input);
@@ -33,18 +34,20 @@ export async function requestLoginCode(input: { email: string }): Promise<Action
 
   await connectDB();
   const isOwner = await User.exists({ email, role: "OWNER", status: "active" });
-  if (isOwner) {
-    after(async () => {
-      try {
-        const code = await issueLoginCode(email);
-        if (code) await sendLoginCodeEmail(email, code); // null = still in resend cooldown
-      } catch (err) {
-        console.error("Login code issue failed:", (err as Error).message);
-      }
-    });
+  if (!isOwner) {
+    return { ok: false, error: "This email is not registered for admin access. Please check it and try again." };
   }
 
-  return { ok: true, message: "If that email belongs to the school owner, a 6-digit code is on its way." };
+  after(async () => {
+    try {
+      const code = await issueLoginCode(email);
+      if (code) await sendLoginCodeEmail(email, code); // null = still in resend cooldown
+    } catch (err) {
+      console.error("Login code issue failed:", (err as Error).message);
+    }
+  });
+
+  return { ok: true, message: "Code sent! Check your inbox (and spam folder)." };
 }
 
 async function signInWith(provider: "email-code" | "password", fields: Record<string, string>): Promise<ActionResult> {

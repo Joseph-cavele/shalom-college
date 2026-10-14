@@ -107,8 +107,9 @@ There is exactly one account — the school owner — and no public registration
 - MongoDB-backed rate limits (shared by all serverless instances): code requests 5/email and 10/IP,
   code checks 15/email and 30/IP, password attempts 5/email and 10/IP — per 15 minutes.
   Counters and codes are removed automatically by TTL indexes.
-- The login page answers the same way whether or not an email belongs to the owner; codes are issued
-  and emailed after the response is sent.
+- An email that isn't the active owner gets a clear "not registered" error (the owner's choice — it
+  confirms which address is the admin one, so the rate limits are what slow down guessing). Codes are
+  issued and emailed after the response is sent.
 - Sessions are encrypted Auth.js JWT cookies (httpOnly, SameSite=Lax, Secure on HTTPS) lasting 8 hours.
   Every admin page and API route re-reads the account (`getSession()` in `lib/auth.ts`), so a disabled
   owner is locked out on their next request; middleware only does a convenience redirect.
