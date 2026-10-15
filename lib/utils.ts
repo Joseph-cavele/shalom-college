@@ -61,6 +61,8 @@ const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
     "/pexels-philips-espinoza-1275989311-26100225.jpg",
     "/pexels-shameer-vayalakkad-hydrose-2602409-21812146.jpg",
   ]],
+  // Electrical engineering (N4–N6) — owner's photo; artisan electrical courses below
+  [/electrical engineering/i, ["/electrical-engineering.jpg"]],
   // Electrical
   [/electric|wiring|fault/i, [
     "/pexels-prashik-narnaware-1004993-35154098.jpg",
@@ -75,10 +77,10 @@ const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
   // Computer & IT
   [/technician|a\+/i, ["/pexels-multitech-institute-2151665718-31800980.jpg", "/pexels-karola-g-7286021.jpg"]],
   [/computer|word|excel|powerpoint|graphic|data|internet|email/i, [
+    "/computer-lesson.jpg", // owner's photo: MS Office class
     "/pexels-delot-18471488.jpg",
     "/pexels-dothanhyb-5530443.jpg",
   ]],
-  // Management & office programmes
   // Management programmes — a different photo for each course
   [/financial/i, ["/management-finance-pexels-33175649.jpg"]],
   [/marketing/i, ["/pexels-thirdman-7654000.jpg"]],
@@ -86,10 +88,12 @@ const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
   [/public relations/i, ["/management-pr-pexels-33317197.jpg"]],
   [/management assistant|office assistant/i, ["/management-assistant-pexels-8691834.jpg"]],
   [/management|business/i, ["/management.jpg"]],
-  // Engineering studies: mechanical & electrical practical focus, civil = drawings
+  // Engineering studies (electrical is matched above)
   [/mechanical engineering/i, ["/pexels-amar-11157438.jpg"]],
-  [/civil|engineering/i, ["/pexels-shvetsa-5324968.jpg"]],
-  [/fet|grade|subject|class/i, ["/extra-classes.jpg"]],
+  [/civil/i, ["/civil-engineering.jpg"]],
+  [/engineering/i, ["/pexels-shvetsa-5324968.jpg"]],
+  // Extra classes: classroom on the course card, the student portrait on the category card
+  [/fet|grade|subject|class/i, ["/extra-classes-classroom.jpg"]],
 ];
 
 const FALLBACK_COURSE_IMAGE = "/pexels-mikhail-nilov-9242175.jpg";
@@ -153,7 +157,7 @@ export const CATEGORY_IMAGE_URL: Record<string, string> = {
   "Engineering Studies": "/pexels-shvetsa-5324968.jpg",
   "Mining & Construction": "/mining-front-end-loader.jpg",
   "Artisan Practical Skills": "/pexels-felipe-silva-1458994757-27082729.jpg",
-  "Computer Short Courses": "/pexels-delot-18471488.jpg",
+  "Computer Short Courses": "/computer-lesson.jpg",
   "Management Programmes": "/management.jpg",
   "Trade Test Preparation": "/pexels-omar-ramadan-1739260-6517339.jpg",
   "Extra Classes (FET)": "/extra-classes.jpg",
