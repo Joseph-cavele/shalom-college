@@ -33,13 +33,18 @@ function hashString(str: string): number {
  * sibling courses don't all share one image.
  */
 const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
-  // Welding & metalwork (bright, clear welding close-up first)
+  // Artisan trades — "artisan-*" photos are from the school's own MERSETA flyer
   [/weld/i, [
+    "/artisan-welding.jpg",
     "/pexels-felipe-silva-1458994757-27082729.jpg",
     "/pexels-solliefoto-320621.jpg",
     "/pexels-lineartwork-12526764.jpg",
   ]],
-  [/boiler|machining|grind|metal/i, ["/pexels-lineartwork-12526764.jpg"]],
+  [/boiler/i, ["/artisan-boiler-making.jpg"]],
+  [/machining|fitt(er|ing)/i, ["/artisan-fitting.jpg"]],
+  [/plumb/i, ["/artisan-plumbing.jpg"]],
+  [/instrumentation/i, ["/artisan-instrumentation.jpg"]],
+  [/grind|metal/i, ["/pexels-lineartwork-12526764.jpg"]],
   // Mining & construction machinery — one photo of each actual machine
   [/dump truck/i, [
     "/mining-dump-truck.jpg",
