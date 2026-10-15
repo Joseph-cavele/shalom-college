@@ -33,17 +33,17 @@ function hashString(str: string): number {
  * sibling courses don't all share one image.
  */
 const COURSE_IMAGE_RULES: [RegExp, string[]][] = [
-  // Artisan trades — "artisan-*" photos are from the school's own MERSETA flyer
+  // Artisan trades — chosen to match the school's MERSETA flyer (Pexels, free licence)
   [/weld/i, [
-    "/artisan-welding.jpg",
+    "/artisan-welding-pexels-5362681.jpg",
     "/pexels-felipe-silva-1458994757-27082729.jpg",
     "/pexels-solliefoto-320621.jpg",
     "/pexels-lineartwork-12526764.jpg",
   ]],
-  [/boiler/i, ["/artisan-boiler-making.jpg"]],
-  [/machining|fitt(er|ing)/i, ["/artisan-fitting.jpg"]],
-  [/plumb/i, ["/artisan-plumbing.jpg"]],
-  [/instrumentation/i, ["/artisan-instrumentation.jpg"]],
+  [/boiler/i, ["/artisan-boiler-making-pexels-7461112.jpg"]],
+  [/machining|fitt(er|ing)/i, ["/artisan-fitting-pexels-2995864.jpg"]],
+  [/plumb/i, ["/artisan-plumbing-pexels-6419128.jpg"]],
+  [/instrumentation/i, ["/artisan-instrumentation-pexels-2760241.jpg"]],
   [/grind|metal/i, ["/pexels-lineartwork-12526764.jpg"]],
   // Mining & construction machinery — one photo of each actual machine
   [/dump truck/i, [
